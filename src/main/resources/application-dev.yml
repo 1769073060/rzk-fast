@@ -3,9 +3,9 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
             driver-class-name: com.mysql.jdbc.Driver
-            url: jdbc:mysql://120.79.7.36:3310/lnsfwx-videos-dev
+            url: jdbc:mysql:///lnsfwx-videos-dev
             username: root
-            password: rzkruizhukai123.
+            password: 
             initial-size: 10
             max-active: 100
             min-idle: 10
