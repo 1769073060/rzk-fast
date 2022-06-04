@@ -1,3 +1,13 @@
+# 部署流程
+
+## maven打包后
+
+### 把jar包和Dockerfile文件上传服务器放在同一个文件中
+
+> docker build -t rzk-fast .
+> docker run -d --restart=always --name rzk-fast -v /usr/local/logs:/home/jar-logs -p 8091:8091 rzk-fast
+
+
 **项目说明** 
 - renren-fast是一个轻量级的，前后端分离的Java快速开发平台，能快速开发项目并交付【接私活利器】
 - 支持MySQL、Oracle、SQL Server、PostgreSQL等主流数据库
@@ -59,7 +69,7 @@ renren-fast
 
 <br>
 
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0307/090140_260d672d_63154.jpeg "在这里输入图片标题")
+![输入图片说明](https://gitee.com/rzkmy/picture/raw/master/wechatPicture/1.jpeg "在这里输入图片标题")
 
 <br> 
 
