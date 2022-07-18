@@ -100,6 +100,7 @@ public class SysMenuController extends AbstractController {
 	@PostMapping("/save")
 	@RequiresPermissions("sys:menu:save")
 	public R save(@RequestBody SysMenuEntity menu){
+		logger.info("保存菜单{}"+menu);
 		//数据校验
 		verifyForm(menu);
 		

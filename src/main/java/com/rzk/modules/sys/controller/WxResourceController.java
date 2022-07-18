@@ -1,28 +1,31 @@
-package com.rzk.modules.demo.controller;
+package com.rzk.modules.sys.controller;
 
-import com.rzk.common.annotation.LogOperation;
-import com.rzk.common.constant.Constant;
-import com.rzk.common.page.PageData;
-import com.rzk.common.utils.ExcelUtils;
-import com.rzk.common.utils.Result;
-import com.rzk.common.validator.AssertUtils;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.rzk.common.exception.RRException;
+import com.rzk.common.utils.Constant;
+import com.rzk.common.utils.PageUtils;
+import com.rzk.common.utils.R;
 import com.rzk.common.validator.ValidatorUtils;
 import com.rzk.common.validator.group.AddGroup;
-import com.rzk.common.validator.group.DefaultGroup;
-import com.rzk.common.validator.group.UpdateGroup;
-import com.rzk.modules.demo.dto.WxResourceDTO;
-import com.rzk.modules.demo.excel.WxResourceExcel;
-import com.rzk.modules.demo.service.WxResourceService;
+ import com.rzk.common.validator.group.UpdateGroup;
+
+import com.rzk.modules.sys.entity.SysMenuEntity;
+import com.rzk.modules.sys.entity.WxResourceEntity;
+import com.rzk.modules.sys.service.WxResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Result;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +37,13 @@ import java.util.Map;
  * @since 1.0.0 2022-07-17
  */
 @RestController
-@RequestMapping("demo/wxresource")
+@RequestMapping("/wx/resource")
 @Api(tags="")
 public class WxResourceController {
     @Autowired
     private WxResourceService wxResourceService;
 
-    @GetMapping("page")
+    @GetMapping("/list")
     @ApiOperation("分页")
     @ApiImplicitParams({
         @ApiImplicitParam(name = Constant.PAGE, value = "当前页码，从1开始", paramType = "query", required = true, dataType="int") ,
@@ -48,69 +51,80 @@ public class WxResourceController {
         @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType="String") ,
         @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType="String")
     })
-    @RequiresPermissions("demo:wxresource:page")
-    public Result<PageData<WxResourceDTO>> page(@ApiIgnore @RequestParam Map<String, Object> params){
-        PageData<WxResourceDTO> page = wxResourceService.page(params);
+    @RequiresPermissions("wx:resource:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = wxResourceService.queryPage(params);
 
-        return new Result<PageData<WxResourceDTO>>().ok(page);
+        return R.ok().put("page", page);
     }
 
-    @GetMapping("{id}")
+    @ResponseBody
+    @GetMapping("/info/{id}")
     @ApiOperation("信息")
-    @RequiresPermissions("demo:wxresource:info")
-    public Result<WxResourceDTO> get(@PathVariable("id") Long id){
-        WxResourceDTO data = wxResourceService.get(id);
+    @RequiresPermissions("wx:resource:info")
+    public R get(@PathVariable("id") Long id){
+        WxResourceEntity wxResourceById = wxResourceService.getById(id);
 
-        return new Result<WxResourceDTO>().ok(data);
+        return R.ok().put("wxResourceById", wxResourceById);
     }
 
-    @PostMapping
+
+    @PostMapping(value = "save")
     @ApiOperation("保存")
-    @LogOperation("保存")
-    @RequiresPermissions("demo:wxresource:save")
-    public Result save(@RequestBody WxResourceDTO dto){
+    @RequiresPermissions("wx:resource:save")
+    public R save(@RequestBody WxResourceEntity wxResource){
         //效验数据
-        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
+        verifyForm(wxResource);
+        wxResourceService.save(wxResource);
 
-        wxResourceService.save(dto);
-
-        return new Result();
+        return R.ok();
     }
 
-    @PutMapping
+    @PutMapping(value = "update")
     @ApiOperation("修改")
-    @LogOperation("修改")
-    @RequiresPermissions("demo:wxresource:update")
-    public Result update(@RequestBody WxResourceDTO dto){
+    @RequiresPermissions("wx:resource:update")
+    public R update(@RequestBody WxResourceEntity wxResource){
         //效验数据
-        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
+        verifyForm(wxResource);
+        wxResourceService.updateById(wxResource);
 
-        wxResourceService.update(dto);
-
-        return new Result();
+        return R.ok();
     }
 
     @DeleteMapping
     @ApiOperation("删除")
-    @LogOperation("删除")
-    @RequiresPermissions("demo:wxresource:delete")
-    public Result delete(@RequestBody Long[] ids){
+    @RequiresPermissions("wx:resource:delete")
+    public R delete(@RequestBody Long[] ids){
         //效验数据
-        AssertUtils.isArrayEmpty(ids, "id");
+         for (Long id : ids) {
+            WxResourceEntity byId = wxResourceService.getById(id);
 
-        wxResourceService.delete(ids);
 
-        return new Result();
+            if (byId==null){
+                return null;
+            }else {
+                wxResourceService.removeById(byId);
+            }
+        }
+
+
+
+        return R.ok();
     }
 
-    @GetMapping("export")
-    @ApiOperation("导出")
-    @LogOperation("导出")
-    @RequiresPermissions("demo:wxresource:export")
-    public void export(@ApiIgnore @RequestParam Map<String, Object> params, HttpServletResponse response) throws Exception {
-        List<WxResourceDTO> list = wxResourceService.list(params);
 
-        ExcelUtils.exportExcelToTarget(response, null, list, WxResourceExcel.class);
+    /**
+     * 验证参数是否正确
+     */
+    private void verifyForm(WxResourceEntity wxResource){
+        if(StringUtils.isBlank(wxResource.getFileName())){
+            throw new RRException("文件不能为空");
+        }
+
+        if(wxResource.getDirectoryName() == null){
+            throw new RRException("分类不能为空");
+        }
+
     }
 
 }
