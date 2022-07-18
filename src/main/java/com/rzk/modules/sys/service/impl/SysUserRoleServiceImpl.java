@@ -13,6 +13,7 @@ import com.rzk.common.utils.MapUtils;
 import com.rzk.modules.sys.dao.SysUserRoleDao;
 import com.rzk.modules.sys.entity.SysUserRoleEntity;
 import com.rzk.modules.sys.service.SysUserRoleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
  * @author Mark sunlightcs@gmail.com
  */
 @Service("sysUserRoleService")
+@Slf4j
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserRoleEntity> implements SysUserRoleService {
 
 	@Override
@@ -41,7 +43,8 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserR
 			SysUserRoleEntity sysUserRoleEntity = new SysUserRoleEntity();
 			sysUserRoleEntity.setUserId(userId);
 			sysUserRoleEntity.setRoleId(roleId);
-
+			log.info("userId{}"+userId);
+			log.info("roleId{}"+roleId);
 			this.save(sysUserRoleEntity);
 		}
 	}

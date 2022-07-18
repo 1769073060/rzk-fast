@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rzk.modules.sys.dao.SysRoleMenuDao;
 import com.rzk.modules.sys.entity.SysRoleMenuEntity;
 import com.rzk.modules.sys.service.SysRoleMenuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ import java.util.List;
  * @author Mark sunlightcs@gmail.com
  */
 @Service("sysRoleMenuService")
+@Slf4j
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuDao, SysRoleMenuEntity> implements SysRoleMenuService {
 
 	@Override
@@ -42,7 +44,8 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuDao, SysRoleM
 			SysRoleMenuEntity sysRoleMenuEntity = new SysRoleMenuEntity();
 			sysRoleMenuEntity.setMenuId(menuId);
 			sysRoleMenuEntity.setRoleId(roleId);
-
+			log.info("menuId{}"+menuId);
+			log.info("roleId{}"+roleId);
 			this.save(sysRoleMenuEntity);
 		}
 	}
