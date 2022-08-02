@@ -41,7 +41,8 @@
 		<fastjson.version>1.2.60</fastjson.version>
 		<hutool.version>4.1.1</hutool.version>
 		<lombok.version>1.18.4</lombok.version>
-
+		<commons-lang.version>3.7</commons-lang.version>
+		<dynamic-datasource>3.5.1</dynamic-datasource>
 		<!--wagon plugin 配置-->
 		<service-path>/work/rzk</service-path>
 		<pack-name>${project.artifactId}-${project.version}.jar</pack-name>
@@ -231,6 +232,16 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang.version}</version>
+ 		</dependency>
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+			<version>${dynamic-datasource}</version>
 		</dependency>
 	</dependencies>
 

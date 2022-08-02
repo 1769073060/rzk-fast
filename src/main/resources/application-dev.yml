@@ -1,11 +1,21 @@
 spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
+        dynamic:
+            primary: master # 设置默认的数据源或者数据源组
+            strict: false
+            datasource:
+                master:
+                    driver-class-name: com.mysql.jdbc.Driver
+                    url: jdbc:mysql://?characterEncoding=utf8&useSSL=false
+                    username: root
+                    password:
+                slave:
+                    driver-class-name: com.mysql.jdbc.Driver
+                    url: jdbc:mysql://?characterEncoding=utf8&useSSL=false
+                    username: root
+                    password:
         druid:
-            driver-class-name: com.mysql.jdbc.Driver
-            url: jdbc:mysql:///lnsfwx-videos-dev
-            username: root
-            password: 
             initial-size: 10
             max-active: 100
             min-idle: 10
