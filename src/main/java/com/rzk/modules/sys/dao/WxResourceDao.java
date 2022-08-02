@@ -1,7 +1,7 @@
-package com.rzk.modules.demo.dao;
+package com.rzk.modules.sys.dao;
 
-import com.rzk.common.dao.BaseDao;
-import com.rzk.modules.demo.entity.WxResourceEntity;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.rzk.modules.sys.entity.WxResourceEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 1.0.0 2022-07-17
  */
 @Mapper
-public interface WxResourceDao extends BaseDao<WxResourceEntity> {
+public interface WxResourceDao extends BaseMapper<WxResourceEntity> {
 	
 }

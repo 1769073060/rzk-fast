@@ -30,7 +30,7 @@ import java.util.Map;
 public class DynamicDataSourceConfig {
     @Autowired
     private DynamicDataSourceProperties properties;
-
+/**
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSourceProperties dataSourceProperties() {
@@ -59,5 +59,5 @@ public class DynamicDataSourceConfig {
 
         return targetDataSources;
     }
-
+**/
 }

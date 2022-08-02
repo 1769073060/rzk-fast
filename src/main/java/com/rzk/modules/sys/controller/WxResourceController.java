@@ -69,7 +69,7 @@ public class WxResourceController {
     }
 
 
-    @PostMapping(value = "save")
+    @PostMapping(value = "/save")
     @ApiOperation("保存")
     @RequiresPermissions("wx:resource:save")
     public R save(@RequestBody WxResourceEntity wxResource){
@@ -80,7 +80,7 @@ public class WxResourceController {
         return R.ok();
     }
 
-    @PutMapping(value = "update")
+    @PostMapping(value = "/update")
     @ApiOperation("修改")
     @RequiresPermissions("wx:resource:update")
     public R update(@RequestBody WxResourceEntity wxResource){

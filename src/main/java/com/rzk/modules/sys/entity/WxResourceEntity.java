@@ -74,11 +74,11 @@ public class WxResourceEntity implements Serializable {
     /**
      * 修改时间
      */
-	private Long updateTime;
+	private String updateTime;
     /**
      * 创建时间
      */
-	private Long createTime;
+	private String createTime;
     /**
      * 下载源:1.百度云,2蓝奏云
      */
